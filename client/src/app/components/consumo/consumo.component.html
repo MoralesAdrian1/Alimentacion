@@ -1,0 +1,187 @@
+<div class="container">
+    <br>
+    
+    <div class="card">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-lg-2"> <!-- Columna Botón -->
+                    <button type="button" class="btn btn-success" (click)="toggleFormulario()" >
+                      {{ mostrarFormulario ? 'Ocultar Formulario' : 'Agregar nueva Mascota' }}
+                    </button>
+                </div>
+                <div class="col-lg-2"> <!-- Columna Tipo Animal -->
+                    <div class="input-group mb-2">
+                        <select class="form-control" [(ngModel)]="filterUser" required>
+                            <option value="">Selecciona Usuario</option>
+                            <!-- Utilizamos un conjunto para almacenar usuarios únicos -->
+                            <ng-container *ngFor="let username of uniqueUsernames">
+                                <option [value]="username">{{ username }}</option>
+                            </ng-container>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-2"> <!-- Columna Dueño -->
+                  <div class="input-group mb-2">
+                    <input type="date" class="form-control" placeholder="Buscar Fecha" [(ngModel)]="filterpost">
+                  </div>
+                </div>
+                <div class="col-lg-2"> <!-- Columna Dueño -->
+                    <div class="input-group mb-2">
+                      <input type="time" class="form-control" placeholder="Buscar Hora" [(ngModel)]="filterHora">
+                    </div>
+                  </div>
+                <div class="col-lg-2"> <!-- Columna Dueño -->
+                    <div class="input-group mb-2">
+                      <<select class="form-control"[(ngModel)]="filterComida" required>
+                        <option value="">Tipo de Comida</option>
+                        <option value="Desayuno">Desayuno</option>
+                        <option value="Almuerzo">Almuerzo</option>
+                        <option value="Comida">Comida</option>
+                        <option value="Cena">Cena</option>
+                        <option value="Merienda/Snack">Merienda/Snack</option>
+                      </select>
+                    </div>
+                  </div>
+                <div class="col-lg-2"> <!-- Columna Mascota -->
+                </div>
+                
+                
+            </div>
+        </div>
+    </div>
+    <br>
+    
+      
+    <div class="row g-3">
+        
+        <!-- Parte Izquierda - Formulario -->
+        <div class="col-md-4" *ngIf="mostrarFormulario">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title" class="text-dart">Agregar/Editar Historial</h5>
+
+                    <form [formGroup]="historialForm" (ngSubmit)="agregarHistorial()">
+                        <select class="form-control" id="username" name="username"
+                        formControlName="username" [(ngModel)]="filterUser" required>
+                            <option value="">Selecciona Usuario</option>
+                            <ng-container *ngFor="let username of uniqueUsernames">
+                                <option [value]="username">{{ username }}</option>
+                            </ng-container>
+                          </select>
+                        <div class="form-group">
+                            <label for="fechaComida" class="text-dart">fechaComida</label>
+                            <input type="date" class="form-control" id="fechaComida" name="fechaComida"
+                                formControlName="fechaComida" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="horaComida" class="text-dart">horaComida</label>
+                            <input type="time" class="form-control" id="horaComida" name="horaComida"
+                                formControlName="horaComida" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="comida" class="text-dart">tipoComida</label>
+                            <<select class="form-control" id="comida" name="comida" formControlName="comida" required>
+                                <option value="">Tipo de Comida</option>
+                                <option value="Desayuno">Desayuno</option>
+                                <option value="Almuerzo">Almuerzo</option>
+                                <option value="Comida">Comida</option>
+                                <option value="Cena">Cena</option>
+                                <option value="Merienda/Snack">Merienda/Snack</option>
+                              </select>
+                        </div>
+
+
+
+                        <div formArrayName="alimentos">
+                            <div *ngFor="let alimentoGroup of alimentos.controls; let i = index" class="form-group"
+                                [formGroupName]="i">
+                                <label for="tipoAnimal" class="text-dart">categoriaAlimento {{ i + 1 }}</label>
+                            <select class="form-control" id="categoriaAlimento" name="categoriaAlimento" formControlName="categoriaAlimento" (change)="onCategoriaSelected($event)" required>
+                              <option value="">categoriaAlimento</option>
+                              <option *ngFor="let categoria of categoria" [value]="categoria.categoriaAlimento">{{ categoria.categoriaAlimento }}</option>
+                            </select>
+
+                            <label for="nombreAlimento" class="text-dart">nombreAlimento</label>
+                            <select class="form-control" id="nombreAlimento" name="nombreAlimento" formControlName="nombreAlimento" required>
+                              <option value="">Selecciona la Raza de animal</option>
+                              <option *ngFor="let alimento of filteredAlimento" [value]="alimento.nombreAlimento">{{ alimento.nombreAlimento}}</option>
+                            </select>
+
+                                <label class="text-dart">Porcion</label>
+                                <input type="number" class="form-control" id="porcion" name="porcion"
+                                formControlName="porcion" required />
+                                <label class="text-dart">calorias</label>
+                                <input type="number" class="form-control" id="calorias" name="calorias"
+                                formControlName="calorias" required />
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-primary" (click)="agregarAlimento()">
+                            Agregar Alimento
+                        </button>
+                        <br>
+
+                        <div class="btn-group mt-2">
+                            <button type="submit" class="btn btn-primary" >Agregar</button>
+                            <button type="button" class="btn btn-success ms-2" (click)="actualizarHistorial()">
+                                Actualizar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Parte Derecha - Tabla -->
+        <!-- Parte Derecha - Tabla -->
+        
+        
+        <div [ngClass]="mostrarFormulario ? 'col-md-8' : 'col-md-12'">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr class="table-primary">
+                        <th scope="col">Usuario</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Hora</th>
+                        <th scope="col">Tipo de Comida</th>
+                        <th scope="col">Alimentos</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="datosP-table-body">
+                    <tr *ngFor="let item of consumo | filter: filterpost | filter: filterComida | filter: filterUser | filter: filterHora">
+                        <td>{{ item.username }}</td>
+                        <td>{{ item.fechaComida }}</td>
+                        <td>{{ item.horaComida}}</td>
+                        <td>{{ item.comida}}</td>
+                        <td>
+                            <ul>
+                                <li *ngFor="let alimentos of item.alimentos">
+                                    Tipo: {{ alimentos.categoriaAlimento }} <br>
+                                    Alimento: {{ alimentos.nombreAlimento }}<br>
+                                    Porcion: {{ alimentos.porcion }}<br>
+                                    Calorias: {{ alimentos.calorias }}
+                                </li>
+                            </ul>
+                        <td>
+                            <button class="btn btn-sm ms-2 btn-primary" (click)="editarHistorial(item)" (click)="toggleFormulario()">
+                                Añadir Alimentos
+                            </button>
+                            <br><br>
+                            <button type="button" class="btn btn-danger btn-sm ms-2" (click)="confirmarEliminarHistorial(item._id)" >
+                                Eliminar Alimentación
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/flatly/bootstrap.min.css"
+            integrity="sha384-qF/QmIAj5ZaYFAeQcrQ6bfVMAh4zZlrGwTPY7T/M+iTTLJqJBJjwwnsE5Y0mV7QK"
+            crossorigin="anonymous" />
+    </div>
+</div>
